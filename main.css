@@ -108,6 +108,11 @@ body {
     border-radius: 50%;
     border: none;
     transition: all 0.1s;
+    box-shadow: inset 0 -5px 0 #0000005c;
+    
+}
+.quantity-btn:active{
+    box-shadow: inset 0 0 0 #0000005c;
 }
 
 .quantity-btn.disabled {
