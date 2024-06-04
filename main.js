@@ -99,6 +99,9 @@ function addProductItem() {
           productName.textContent = editProductName.value;
           productName.style.display = 'block';
           editProductName.style.display = 'none';
+          let b = item.querySelector(".badge");
+          item.textContent = editProductName.value;
+          item.appendChild(b);
       });
 
       editProductName.addEventListener('keydown', (event) => {
@@ -107,9 +110,8 @@ function addProductItem() {
           }
       });
 
-      addItem(name);
     }
-
+    let item = addItem(name);
     function addItem(name){
         // Create a new product item element
       const newProductItem = document.createElement("div");
@@ -132,8 +134,9 @@ function addProductItem() {
       const pendingItem = document.createElement("div");
       pendingItem.classList.add("item");
       pendingItem.textContent = itemName;
-      pendingItem.appendChild(badge.cloneNode(true)); // Clone the badge for consistency
+      pendingItem.appendChild(badge); // Clone the badge for consistency
       pendingList.appendChild(pendingItem);
+      return(pendingItem);
     }
   
     // Create the quantity control element
@@ -168,8 +171,11 @@ function addProductItem() {
 
       // Handle decrement button click
       decrementButton.addEventListener('click', function () {
+
           let quantity = parseInt(quantityDisplay.textContent);
+          let it=item;
           if (quantity > 1) {
+                it.querySelector(".badge").textContent=quantity-1;
               quantity--;
               quantityDisplay.textContent = quantity;
           }
@@ -179,6 +185,8 @@ function addProductItem() {
       // Handle increment button click
       incrementButton.addEventListener('click', function () {
           let quantity = parseInt(quantityDisplay.textContent);
+          let it=item;
+          it.querySelector(".badge").textContent=quantity+1;
           quantity++;
           quantityDisplay.textContent = quantity;
           updateButtonState(decrementButton, quantityDisplay);
@@ -207,7 +215,12 @@ function addProductItem() {
       // Find the closest product-item and remove it
       const productItem = removeButton.closest('.product-item');
       if (productItem) {
-          markAsPurchased(productItem);
+        //const pendingList = document.querySelector(".pending-list");
+    //pendingList.removeChild(item);
+    const boughtList = document.querySelector(".bought-list");
+    boughtList.appendChild(item);
+            item.classList.add("purchased");
+          markAsPurchased(productItem,item);
       }
     });
   
@@ -221,6 +234,7 @@ function addProductItem() {
       // Find the closest product-item and remove it
       const productItem = removeButton.closest('.product-item');
       if (productItem) {
+          item.remove();
           productItem.remove();
       }
     });
@@ -236,7 +250,7 @@ initAddProductItem("Помідори"); // Change these names to your products
 initAddProductItem("Печиво"); 
 initAddProductItem("Сир"); 
 
-function markAsPurchased(productItem) {
+function markAsPurchased(productItem,item) {
   const productName = productItem.querySelector('.product-name');
   const quantityControl = productItem.querySelector('.quantity-control');
   const actionButtons = productItem.querySelector('.action-buttons');
@@ -259,12 +273,17 @@ function markAsPurchased(productItem) {
   
   const unpurchaseBtn = productItem.querySelector('.unpurchase-btn');
   unpurchaseBtn.addEventListener('click', function() {
-      markAsUnpurchased(productItem);
+    const pendingList = document.querySelector(".pending-list");
+    pendingList.appendChild(item);
+    //const boughtList = document.querySelector(".bought-list");
+    //boughtList.removeChild(item);
+    item.classList.remove("purchased");
+      markAsUnpurchased(productItem,item);
   });
 }
 
 // Function to mark product as unpurchased
-function markAsUnpurchased(productItem) {
+function markAsUnpurchased(productItem,item) {
   const productName = productItem.querySelector('.product-name');
   const quantityControl = productItem.querySelector('.quantity-control');
   const actionButtons = productItem.querySelector('.action-buttons');
@@ -288,11 +307,17 @@ function markAsUnpurchased(productItem) {
   
   const purchaseBtn = productItem.querySelector('.purchase-btn');
   purchaseBtn.addEventListener('click', function() {
-      markAsPurchased(productItem);
+    //const pendingList = document.querySelector(".pending-list");
+    //pendingList.removeChild(item);
+    const boughtList = document.querySelector(".bought-list");
+    boughtList.appendChild(item);
+        item.classList.add("purchased");
+      markAsPurchased(productItem,item);
   });
   
   const removeBtn = productItem.querySelector('.remove-btn');
   removeBtn.addEventListener('click', function() {
+    item.remove();
       productItem.remove();
   });
 }
