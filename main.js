@@ -41,6 +41,37 @@ function addProductItem() {
     productName.classList.add("product-name");
     productName.textContent = itemName;
     newProductItem.appendChild(productName);
+    if (productName) {
+      const editProductName = document.createElement('input');
+      editProductName.type = 'text';
+      editProductName.className = 'edit-product-name';
+      editProductName.style.display = 'none';
+      productName.parentNode.insertBefore(editProductName, productName.nextSibling);
+
+      productName.addEventListener('click', () => {
+          if (!productName.classList.contains('purchased')) {
+              editProductName.value = productName.textContent;
+              productName.style.display = 'none';
+              editProductName.style.display = 'block';
+              editProductName.focus();
+          }
+      });
+
+      editProductName.addEventListener('blur', () => {
+          if(!editProductName.value.trim()){
+            editProductName.value = productName.textContent;
+          }
+          productName.textContent = editProductName.value;
+          productName.style.display = 'block';
+          editProductName.style.display = 'none';
+      });
+
+      editProductName.addEventListener('keydown', (event) => {
+          if (event.key === 'Enter') {
+              editProductName.blur();
+          }
+      });
+    }
   
     // Create the quantity control element
     const quantityControl = document.createElement("div");
@@ -79,6 +110,13 @@ function addProductItem() {
     purchasedButton.textContent = "Куплено";
     purchasedButton.dataset.tooltip = "Позначити як куплене";
     actionButtons.appendChild(purchasedButton);
+    purchasedButton.addEventListener('click', ()=>{
+      // Find the closest product-item and remove it
+      const productItem = removeButton.closest('.product-item');
+      if (productItem) {
+          markAsPurchased(productItem);
+      }
+    });
   
     // Create the remove button
     const removeButton = document.createElement("button");
@@ -86,6 +124,13 @@ function addProductItem() {
     removeButton.textContent = "⨉";
     removeButton.dataset.tooltip = "Видалити товар";
     actionButtons.appendChild(removeButton);
+    removeButton.addEventListener('click', ()=>{
+      // Find the closest product-item and remove it
+      const productItem = removeButton.closest('.product-item');
+      if (productItem) {
+          productItem.remove();
+      }
+    });
   
     // Add the action buttons to the product item
     newProductItem.appendChild(actionButtons);
@@ -94,11 +139,72 @@ function addProductItem() {
     productItemsContainer.appendChild(newProductItem);
   }
 // Pre-load three product items on page load
-initAddProductItem("Молоко (Milk)"); // Change these names to your products
-initAddProductItem("Молоко (Milk)"); 
-initAddProductItem("Молоко (Milk)"); 
+initAddProductItem("Помідори"); // Change these names to your products
+initAddProductItem("Печиво"); 
+initAddProductItem("Сир"); 
   
 // Add event listener to the button
 const addButton = document.querySelector(".input-button");
 addButton.addEventListener("click", addProductItem);
+
+function markAsPurchased(productItem) {
+  const productName = productItem.querySelector('.product-name');
+  const quantityControl = productItem.querySelector('.quantity-control');
+  const actionButtons = productItem.querySelector('.action-buttons');
+  
+  productName.classList.add('purchased');
+  productName.style.textDecoration = 'line-through';
+  
+  if (quantityControl) {
+    const quantBtns = quantityControl.querySelectorAll(".quantity-btn");
+    if(quantBtns){
+      Array.prototype.forEach.call(quantBtns, child => {
+        child.style.display = "none";
+      });
+    }
+  }
+  
+  actionButtons.innerHTML = `
+      <button data-tooltip="Видалити з куплених" class="action-btn unpurchase-btn">Не куплено</button>
+  `;
+  
+  const unpurchaseBtn = productItem.querySelector('.unpurchase-btn');
+  unpurchaseBtn.addEventListener('click', function() {
+      markAsUnpurchased(productItem);
+  });
+}
+
+// Function to mark product as unpurchased
+function markAsUnpurchased(productItem) {
+  const productName = productItem.querySelector('.product-name');
+  const quantityControl = productItem.querySelector('.quantity-control');
+  const actionButtons = productItem.querySelector('.action-buttons');
+  
+  productName.classList.remove('purchased');
+  productName.style.textDecoration = 'none';
+  
+  if (quantityControl) {
+    const quantBtns = quantityControl.querySelectorAll(".quantity-btn");
+    if(quantBtns){
+      Array.prototype.forEach.call(quantBtns, child => {
+        child.style.display = "block";
+      });
+    }
+  }
+  
+  actionButtons.innerHTML = `
+      <button data-tooltip="Позначити як куплене" class="action-btn purchase-btn">Куплено</button>
+      <button data-tooltip="Видалити товар" class="remove-btn">⨉</button>
+  `;
+  
+  const purchaseBtn = productItem.querySelector('.purchase-btn');
+  purchaseBtn.addEventListener('click', function() {
+      markAsPurchased(productItem);
+  });
+  
+  const removeBtn = productItem.querySelector('.remove-btn');
+  removeBtn.addEventListener('click', function() {
+      productItem.remove();
+  });
+}
   
