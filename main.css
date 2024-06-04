@@ -75,6 +75,11 @@ body {
     justify-content: center;
 }
 
+#core-product-item{
+    background-color: #13d226;
+    display: none;
+}
+
 .product-name {
     margin-right: auto;
     width: 15%;

@@ -1,3 +1,13 @@
+// Add event listener to the button
+const addButton = document.querySelector(".input-button");
+addButton.addEventListener("click", addProductItem);
+const field = document.querySelector(".input-box");
+field.addEventListener('keydown', (event) => {
+  if (event.key == 'Enter') {
+      addProductItem();
+  }
+});
+
 function addProductItem() {
     // Get the input field and button elements
     const inputBox = document.querySelector(".input-box");
@@ -8,6 +18,7 @@ function addProductItem() {
   
     // Get the value from the input field
     const itemName = inputBox.value.trim();
+
   
     // Check if the input field is empty
     if (!itemName) {
@@ -18,6 +29,30 @@ function addProductItem() {
   
     // Clear the input field
     inputBox.value = "";
+    inputBox.focus();
+  }
+  function addProductItemEnter() {
+    // Get the input field and button elements
+    const inputBox = document.querySelector(".input-box");
+    const addButton = document.querySelector(".input-button");
+  
+    // Get the container for product items
+    const productItemsContainer = document.querySelector(".product-item.section").parentNode;
+  
+    // Get the value from the input field
+    const itemName = inputBox.ariaValueNow.trim();
+
+  
+    // Check if the input field is empty
+    if (!itemName) {
+      return; // Do nothing if the input field is empty
+    }
+  
+    initAddProductItem(itemName);
+  
+    // Clear the input field
+    inputBox.value = "";
+    inputBox.focus();
   }
   function initAddProductItem(name) {
   
@@ -172,10 +207,6 @@ function addProductItem() {
 initAddProductItem("Помідори"); // Change these names to your products
 initAddProductItem("Печиво"); 
 initAddProductItem("Сир"); 
-  
-// Add event listener to the button
-const addButton = document.querySelector(".input-button");
-addButton.addEventListener("click", addProductItem);
 
 function markAsPurchased(productItem) {
   const productName = productItem.querySelector('.product-name');
