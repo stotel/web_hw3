@@ -14,6 +14,24 @@ function addProductItem() {
       return; // Do nothing if the input field is empty
     }
   
+    initAddProductItem(itemName);
+  
+    // Clear the input field
+    inputBox.value = "";
+  }
+  function initAddProductItem(name) {
+  
+    // Get the container for product items
+    const productItemsContainer = document.querySelector(".product-item.section").parentNode;
+  
+    // Get the value from the input field
+    const itemName = name;
+  
+    // Check if the input field is empty
+    if (!itemName) {
+      return; // Do nothing if the input field is empty
+    }
+  
     // Create a new product item element
     const newProductItem = document.createElement("div");
     newProductItem.classList.add("product-item", "section");
@@ -72,14 +90,15 @@ function addProductItem() {
     // Add the action buttons to the product item
     newProductItem.appendChild(actionButtons);
   
-    // Clear the input field
-    inputBox.value = "";
-  
     // Add the new product item to the container
     productItemsContainer.appendChild(newProductItem);
   }
+// Pre-load three product items on page load
+initAddProductItem("Молоко (Milk)"); // Change these names to your products
+initAddProductItem("Молоко (Milk)"); 
+initAddProductItem("Молоко (Milk)"); 
   
-  // Add event listener to the button
-  const addButton = document.querySelector(".input-button");
-  addButton.addEventListener("click", addProductItem);
+// Add event listener to the button
+const addButton = document.querySelector(".input-button");
+addButton.addEventListener("click", addProductItem);
   
