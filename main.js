@@ -106,6 +106,34 @@ function addProductItem() {
               editProductName.blur();
           }
       });
+
+      addItem(name);
+    }
+
+    function addItem(name){
+        // Create a new product item element
+      const newProductItem = document.createElement("div");
+      newProductItem.classList.add("product-item", "section");
+
+      // Create the product name element
+      const productName = document.createElement("h3");
+      productName.classList.add("product-name");
+      productName.textContent = itemName;
+      newProductItem.appendChild(productName);
+
+      // Create the badge element
+      const badge = document.createElement("div");
+      badge.classList.add("badge");
+      badge.textContent = "1";
+       newProductItem.appendChild(badge);
+
+  // Add the item to the pending list
+      const pendingList = document.querySelector(".pending-list");
+      const pendingItem = document.createElement("div");
+      pendingItem.classList.add("item");
+      pendingItem.textContent = itemName;
+      pendingItem.appendChild(badge.cloneNode(true)); // Clone the badge for consistency
+      pendingList.appendChild(pendingItem);
     }
   
     // Create the quantity control element
