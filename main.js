@@ -99,6 +99,36 @@ function addProductItem() {
   
     // Add the quantity control to the product item
     newProductItem.appendChild(quantityControl);
+    if (decrementButton && incrementButton && quantityDisplay) {
+      // Initialize button states
+      updateButtonState(decrementButton, quantityDisplay);
+
+      // Handle decrement button click
+      decrementButton.addEventListener('click', function () {
+          let quantity = parseInt(quantityDisplay.textContent);
+          if (quantity > 1) {
+              quantity--;
+              quantityDisplay.textContent = quantity;
+          }
+          updateButtonState(decrementButton, quantityDisplay);
+      });
+
+      // Handle increment button click
+      incrementButton.addEventListener('click', function () {
+          let quantity = parseInt(quantityDisplay.textContent);
+          quantity++;
+          quantityDisplay.textContent = quantity;
+          updateButtonState(decrementButton, quantityDisplay);
+      });
+  }
+
+  function updateButtonState(decrementButton, quantityDisplay) {
+    if (parseInt(quantityDisplay.textContent) <= 1) {
+      decrementButton.classList.add('disabled');
+    } else {
+      decrementButton.classList.remove('disabled');
+    }
+  }
   
     // Create the action buttons element
     const actionButtons = document.createElement("div");
