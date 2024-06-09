@@ -12,8 +12,10 @@ function addProductItem() {
     const inputBox = document.querySelector(".input-box");
     const itemName = inputBox.value.trim();
 
-    if (!itemName || isProductItemExists(itemName)) return;
-
+    if (!itemName || isProductItemExists(itemName)) {
+      inputBox.focus();
+      return;
+    }
     initAddProductItem(itemName);
 
     inputBox.value = "";
@@ -77,7 +79,7 @@ function initAddProductItem(name) {
 
     const item = addItem(name);
 
-    function addItem(name) {
+    function addItem(name) {  
         const newProductItem = document.createElement("div");
         newProductItem.classList.add("product-item", "section");
 
